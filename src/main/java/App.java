@@ -6,6 +6,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import co.simplon.jpaEtHibernate.City;
+import co.simplon.jpaEtHibernate.Monument;
 
 public class App implements AutoCloseable {
 	private static final String PERSISTENCE_UNIT_NAME = "demo-jpa-1";
@@ -42,6 +43,7 @@ public class App implements AutoCloseable {
 		em.close();
 		return city;
 	}
+	
 
 	public City create(EntityManager em, City city) {
 		em.getTransaction().begin();
@@ -50,6 +52,24 @@ public class App implements AutoCloseable {
 		return city;
 	}
 
+	// Monument
+	public Monument createMonument() {
+		EntityManager em = factory.createEntityManager();
+		Monument mon = new Monument("Le BHV");
+		mon.setCity(em.find(City.class, 5L));
+		mon = createM(em, mon);
+		em.close();
+		return mon;
+	}
+	public Monument createM(EntityManager em, Monument mon) {
+		em.getTransaction().begin();
+		em.persist(mon);
+		em.getTransaction().commit();
+		return mon;
+	}
+
+	
+	
 	public City createCityAndUpdate() {
 		EntityManager em = factory.createEntityManager();
 		City city = new City("Préchac-sur-Adour", 0, 0.5);
@@ -128,6 +148,9 @@ public class App implements AutoCloseable {
 			System.out.println("Lire une ville :" + app.readCity());
 			System.out.println("Mettre à jour : " + app.updateCity());
 			System.out.println("Supression de ma vile :" + app.removeCity(null));
+			
+			//Monument
+			System.out.println("Créer un monument: " + app.createMonument());
 		} catch (Exception e) {
 
 		}

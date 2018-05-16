@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -12,7 +13,8 @@ import javax.persistence.Table;
 
 public class City {
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "city_generator")
+	@SequenceGenerator(name="city_generator", sequenceName = "city_sequence", allocationSize=1)
 	@Column(name="ID", nullable=false)
 	private Long id;
 	@Column(name="NAME", nullable=false, length=255)
@@ -21,7 +23,8 @@ public class City {
 	private Double latitude;
 	@Column(name="LONGITUDE", nullable=false)
 	private Double longitude;
-
+	
+	
 	public City() {
 	}
 
