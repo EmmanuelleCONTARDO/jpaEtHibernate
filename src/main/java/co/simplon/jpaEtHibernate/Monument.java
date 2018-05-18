@@ -1,7 +1,7 @@
 package co.simplon.jpaEtHibernate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,13 +10,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "MONUMENTS")
+@NamedQueries({
+	@NamedQuery(name = "Monument.findAll", query = " SELECT m FROM Monument m ORDER BY m.name, m.id "),
+	@NamedQuery(name = "Monument.deleteById", query = " DELETE FROM Monument m WHERE m.id = :id") })
 
 public class Monument {
 	@Id
@@ -28,10 +33,10 @@ public class Monument {
 	private String name;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "city")
-	private City city;;
+	private City city;
 
-	@OneToMany(mappedBy = "city")
-	private List<Monument> monuments = new ArrayList<Monument>();
+	@ManyToMany(mappedBy = "monuments")
+	private Set<User> users = new HashSet<User>();
 
 	public Monument(String name) {
 		super();
@@ -57,11 +62,22 @@ public class Monument {
 		this.name = name;
 	}
 
-	
-	 public City getCity() { return city; }
-	 
-	 public void setCity(City city) { this.city = city; }
-	 
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
+	}
+
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUser(Set<User> user) {
+		this.users = user;
+	}
+
 	@Override
 	public String toString() {
 		return "Monument [id=" + id + ", name=" + name + ", city=" + city + "]";
