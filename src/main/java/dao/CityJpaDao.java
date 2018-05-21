@@ -6,9 +6,6 @@ import co.simplon.jpaEtHibernate.City;
 
 public class CityJpaDao implements CityDao {
 	private EntityManager em;
-
-	
-	
 	public CityJpaDao (EntityManager em) {
 		this.em = em;
 	}
